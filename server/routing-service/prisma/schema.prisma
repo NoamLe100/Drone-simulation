@@ -1,0 +1,21 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model RoutePlan {
+  id        String   @id @default(uuid())
+  runId     String
+  type      PlanType
+  path      Json
+  createdAt DateTime @default(now())
+}
+
+enum PlanType {
+  INITIAL
+  REPLAN
+}

@@ -1,0 +1,28 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Map {
+  id        String   @id @default(uuid())
+  rows      Int
+  columns   Int
+  cells     Cell[]
+  createdAt DateTime @default(now())
+}
+
+model Cell {
+  id             String @id @default(uuid())
+  mapId          String
+  map            Map    @relation(fields: [mapId], references: [id])
+  row            Int
+  column         Int
+  traversalTime  Int
+  riskLevel      Int
+
+  @@unique([mapId, row, column])
+}
