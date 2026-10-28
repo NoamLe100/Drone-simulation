@@ -52,6 +52,7 @@ describe('routing algorithms', () => {
   });
 
   it('finds a route through zero-cost cells without looping', () => {
+    
     const costGrid = buildCostGrid({
       rows: 2,
       columns: 3,
