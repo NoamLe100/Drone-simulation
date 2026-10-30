@@ -7,7 +7,7 @@ export function createGridRectangle() {
     const metersEast = columns* CELL_SIZE_METERS;  
     return new Rectangle(
         toRadian(topLeftLongitude),
-        toRadian(topLeftLatitude - metersSouth / METERS_PER_DEGREE),
+        toRadian(topLeftLatitude  -  metersSouth / METERS_PER_DEGREE),
         toRadian(topLeftLongitude + metersEast / metersPerDegreeLongitude(METERS_PER_DEGREE,topLeftLatitude)),
         toRadian(topLeftLatitude)
     );
