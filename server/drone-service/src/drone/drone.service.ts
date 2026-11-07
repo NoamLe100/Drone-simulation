@@ -1,17 +1,18 @@
     import {Injectable} from "@nestjs/common";
     import { DronseScatteringDto } from "../dto/dronseScattering.dto";
-    import { Drone,Location } from "../type";
+    import { Drone,Location,FullMap } from "../type";
+    import { riskCalculationDto } from "../dto/riskCalculation.dto";
     @Injectable()
     export class DronesService {
         private dronesLocation:Drone[]=[];
-        dronseScattering (dronseScatteringDto:DronseScatteringDto){
+        dronseScattering (input:DronseScatteringDto){
         const randomeNumofDrons= Math.floor(Math.random()*(20-15+1)+15);
         this.dronesLocation=[];
         for(let i =0 ;i<randomeNumofDrons;i++)
         {
-            const randomRow = Math.floor(Math.random()*((dronseScatteringDto.rows-1)-0+1)+0);
-            const randomcolumn = Math.floor(Math.random()*((dronseScatteringDto.columns-1)-0+1)+0);
-            const route= this.createDroneRoute(randomRow,randomcolumn,dronseScatteringDto.rows,dronseScatteringDto.columns);
+            const randomRow = Math.floor(Math.random()*((input.rows-1)-0+1)+0);
+            const randomcolumn = Math.floor(Math.random()*((input.columns-1)-0+1)+0);
+            const route= this.createDroneRoute(randomRow,randomcolumn,input.rows,input.columns);
             const drone:Drone = {
                 speed: 50,
                 route: route,
@@ -37,4 +38,35 @@
         }
         return location;
     }
+    riskCalculation (input:riskCalculationDto){
+        if(this.dronesLocation.length === 0){
+            throw new Error("No drones available for risk calculation");
+        }
+
+        const cells = input.cells;
+        for (let i = 0; i < this.dronesLocation.length; i++) {
+            const drone = this.dronesLocation[i];
+            const droneLocarionIndex = this.dronesLocation[i].routeIndex;
+            cells[drone.route[droneLocarionIndex].row * input.columns + drone.route[droneLocarionIndex].column].riskLevel += 3;
+            for (let j =-1 ; j <= 1 ;j++)
+                for(let k =-1 ; k <= 1 ;k++)
+            {
+                if(j===0&&k===0||drone.route[droneLocarionIndex].row+j<0||drone.route[droneLocarionIndex].row+j>=input.rows||drone.route[droneLocarionIndex].column+k<0||drone.route[droneLocarionIndex].column+k>=input.columns)
+                continue;
+                else
+                cells[(drone.route[droneLocarionIndex].row+j) * input.columns +drone.route[droneLocarionIndex].column+k].riskLevel += 1;
+            }
+        }
+        const updatedullMap:FullMap = {
+            rows:input.rows,
+            columns:input.columns,
+            cells:cells.map(cell => ({
+                row: cell.row,
+                column: cell.column,   
+                traversalTime: cell.traversalTime,
+                riskLevel: cell.riskLevel 
+            }))
+        };
+        return updatedullMap;
     }
+}

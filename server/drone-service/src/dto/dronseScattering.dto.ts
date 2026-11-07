@@ -1,6 +1,8 @@
-import { isNumber } from "@nestjs/common/internal";
+import {IsInt, IsNumber} from "class-validator";
 
 export class DronseScatteringDto {
-    rows:number;
-    columns:number;
+    @IsInt()
+    rows!: number;
+    @IsInt()
+    columns!: number;
 }
