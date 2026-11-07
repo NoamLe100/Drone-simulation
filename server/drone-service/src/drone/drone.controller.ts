@@ -8,11 +8,15 @@ export class DroneController {
   constructor(private readonly dronesService: DronesService) {}
 
     @Post('scatter')
-     dronseScattering(@Body() input: DronseScatteringDto) {
-     return this.dronesService.dronseScattering(input);
+    dronseScattering(@Body() input: riskCalculationDto) {
+    return this.dronesService.dronseScattering(input);
   }
     @Post ('risk')
      riskCalculation(@Body() input: riskCalculationDto) {
      return this.dronesService.riskCalculation(input);
   }
+    @Post('step')
+     step() {
+     return this.dronesService.step();
+}
 }

@@ -17,5 +17,6 @@ export interface Drone {
     speed:number;
     route:Location[];
     routeIndex:number;
+    movingForward:boolean;
     mode:"Attack"|"Patrol"|"Return";
 }
